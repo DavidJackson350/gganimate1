@@ -1,0 +1,117 @@
+#+TITLE: Intro to gganimate 
+#+AUTHOR: _______ [pledged]
+#+SUBTITLE: gganimate practice file
+#+STARTUP: overview hideblokcs indent
+#+OPTIONS: toc:nil num:nil ^:nil
+#+PROPERTY: header-args:R :session *R* :results output :exports both
+* TODO Identify and pledge the file
+ We do this every class. You got this!
+* TODO Background of gganimat
+
+gganimate is an extension of the ggplot2 visualization package. It
+allows the user to bring their plots and graphs to life with
+animations.
+
+It is recommended to also download the package ~gifski~ to allow for
+easier .gif outputs. 
+* TODO Create a barplot animation
+
+- install and load the packages we need. We need ~ggplot2~, ~gganimate~,
+  ~gifski~, and ~gapminder~. If you do not have these packages installed
+  already, open CMD, and install them. 
+
+ #+begin_src R :results nill 
+  
+ #+end_src
+
+   
+
+- Make 2 basic states and concatenate them:  I have created data for us to use. 
+#+begin_src R
+  a <- data.frame(group=c("Blackberry", "Cranberry", "Raspberry", "Strawberry"),
+                   values=c(22, 14, 16, 19),
+                   frame=rep('a', 2))
+
+  b <- data.frame(group=c("Blackberry", "Cranberry", "Raspberry", "Strawberry"),
+                   values=c(16, 22, 12, 17),
+                   frame=rep('b', 2))
+
+data <- rbind(a,b)
+#+end_src
+
+
+ - Create a Basic Barplot using ggplot2
+   
+
+#+begin_src R :results graphics file :file gganimate_barplot2.png
+  ____(a, aes(x=____, y=_____, fill=group)) +
+    geom_bar(stat= 'identity')
+#+end_src
+
+
+ - Make a ggplot, but add frame=year: one image per year
+
+   #+begin_src R :results graphics file :file animated-barplot.gif
+      ggplot(___, aes(x=___, y=___, fill=group)) +
+       geom_bar(stat='identity') +
+       theme_bw() +
+       _____________(
+       frame,
+       transition_length = _,
+       state_length = 1) +
+       ease_aes('sine-in-out')
+   #+end_src
+
+  
+* TODO Create a bubble chart animation
+
+- Load the packages we need again
+  #+begin_src R
+    library(ggplot2)
+    library(gganimate)
+    library(gapminder)
+    library(gifski)
+  #+end_src
+
+  #+RESULTS:
+
+
+- Make a static plot using the package ~gapminder~. Make the x axis
+  label ~"GDP per Capita"~ and the y axis label ~"Life Expectancy"~. 
+
+  #+begin_src R :results graphic file :file animated-scatterplot.png
+      p <- ggplot(______, aes(x=gdpPercap, y=lifeExp, size = pop, colour = country)) +
+           geom_point(show.legend = FALSE, alpha = 0.7) +
+           scale_color_viridis_d() +
+           scale_size(range = c(2,12)) +
+           scale_x_log10() +
+           labs(x = _______, y = _________)
+     p 
+
+  #+end_src
+
+    
+ - Lets add transitions to the plot. Transition should be based off the ~year~. 
+
+   #+begin_src R :results graphics :file animated-gdp.png
+     p + transition_time(____) +
+     labs(title = "Year: {frame_time}")
+   #+end_src
+
+
+ - Lets create facets by continent
+
+   #+begin_src R :results graphics :file animated-gdp2.gif
+     p + _____(~continent) +
+     transition_time(year) +
+     labs(title ="Year: {frame_time}")
+   #+end_src
+
+* TODO Resources
+
+  R Core Team (2021). R: A language and environment for statistical
+  computing. R Foundation for Statistical Computing, Vienna,
+  Austria.[[https://www.R-project.org/][URL]]
+  Stallman, R. M. (1984). The Emacs editor. GNU Project. [[https://www.gnu.org/software/emacs/][emacs]]
+  R Graph Gallery. (n.d.). Smooth animation with tweenr. Retrieved May 1, 2023, from [[https://r-graph-gallery.com/287-smooth-animation-with-tweenr.html]]
+  
